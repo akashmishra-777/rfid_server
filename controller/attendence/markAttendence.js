@@ -2,35 +2,35 @@ const ATTENDENCE = require("../../modals/studentAttendence.js")
 async function mark_attendence(req,res) {
     console.log(req.body.id)
     if(!req.body.id){
-        return res.json({
+        return res.status(501).json({
             msg:"Student id is not received on the server.",
             success:false
         })
     }
 
     if(!req.body.name){
-        return res.json({
+        return res.status(501).json({
             msg:"Student name is not received on the server.",
             success:false
         })
     }
 
     if(!req.body.phone){
-        return res.json({
+        return res.status(501).json({
             msg:"Student phone number is not received on the server.",
             success:false
         })
     }
 
     if(!req.body.branch){
-        return res.json({
+        return res.status(501).json({
             msg:"Student branch data  is not received on the server.",
             success:false
         })
     }
 
     if(!req.body.section){
-        return res.json({
+        return res.status(501).json({
             msg:"Student section data is not received on the server.",
             success:false
         })
@@ -59,7 +59,7 @@ async function mark_attendence(req,res) {
                     success:true
                 })
             }else{
-                return res.json({
+                return res.status(501).json({
                     msg:"Error while marking attendence",
                     success:false
                 })
@@ -75,7 +75,7 @@ async function mark_attendence(req,res) {
                     })
                 }
             } catch (error) {
-                return res.json({
+                return res.status(501).json({
                     msg:error.message,
                     comingFrom:"PunchOut code.",
                     success:false
@@ -85,7 +85,7 @@ async function mark_attendence(req,res) {
         }
 
     } catch (error) {
-        return res.json({
+        return res.status(501).json({
             msg:error.message,
             success:false
         })
