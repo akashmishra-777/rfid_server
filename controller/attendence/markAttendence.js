@@ -42,6 +42,7 @@ async function mark_attendence(req,res) {
 
     try {
         const checkTodaysAttendence = await ATTENDENCE.find({idx:id,date:new Date().toISOString().split("T")[0]})
+
         if(checkTodaysAttendence.length == 0){
             const result = await ATTENDENCE.create({
                 idx:id,
@@ -87,6 +88,7 @@ async function mark_attendence(req,res) {
     } catch (error) {
         return res.status(501).json({
             msg:error.message,
+            comingFrom:"catch last",
             success:false
         })
     }
