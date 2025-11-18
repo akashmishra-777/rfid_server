@@ -66,7 +66,7 @@ async function mark_attendence(req,res) {
 
             console.log("Not working")
             return res.json({
-                msg: "Punched In Successfully",
+                msg: "Punched In",
                 success: true,
                 data: result
             });
@@ -77,7 +77,7 @@ async function mark_attendence(req,res) {
         // ---------------------------------------------------
         if (existing.punchOut === true) {
             return res.status(501).json({
-                msg: "Already Punched Out Today",
+                msg: "Already Punched Out.",
                 success: false
             });
         }
@@ -92,7 +92,7 @@ async function mark_attendence(req,res) {
 
         if (update.modifiedCount === 1) {
             return res.json({
-                msg: "Punched Out Successfully",
+                msg: "Punched Out.",
                 success: true
             });
         }
