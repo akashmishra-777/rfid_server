@@ -77,7 +77,7 @@ async function mark_attendence(req,res) {
         // ---------------------------------------------------
         if (existing.punchOut === true) {
             return res.status(200).json({
-                msg: "Already Punched Out.",
+                msg: "Punched Out.",
                 success: true
             });
         }
