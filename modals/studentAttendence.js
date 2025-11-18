@@ -5,7 +5,6 @@ const ATTENDENCE_SCHEMA = new mongoose.Schema({
     idx:{
         type:String,
         required:true,
-        unique:true
     },
     name : {
         type:String,
