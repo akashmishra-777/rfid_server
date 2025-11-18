@@ -40,57 +40,73 @@ async function mark_attendence(req,res) {
     const {id,name,branch,section,phone} = req.body
 
 
-    try {
-        const checkTodaysAttendence = await ATTENDENCE.find({idx:id,date:new Date().toISOString().split("T")[0]})
+     try {
 
-        if(checkTodaysAttendence.length == 0){
+        // Get today's date in YYYY-MM-DD
+        const today = new Date().toISOString().split("T")[0];
+        console.log(today)
+        // Check if today's entry already exists
+        const existing = await ATTENDENCE.findOne({ idx: id, date: today });
+        console.log(existing)
+        // ---------------------------------------------------
+        // CASE 1: FIRST ENTRY OF TODAY → PUNCH IN
+        // ---------------------------------------------------
+        if (!existing) {
+            console.log("existing")
             const result = await ATTENDENCE.create({
-                idx:id,
+                idx: id,
                 name,
                 branch,
                 section,
                 phone,
-                punchIn:true
-            })
+                date: today,     // IMPORTANT!!!
+                punchIn: true,
+                punchOut: false
+            });
 
-
-            if(result){
-                return res.json({
-                    msg:"Punched In",
-                    success:true
-                })
-            }else{
-                return res.status(501).json({
-                    msg:"Error while marking attendence",
-                    success:false
-                })
-            }
-        }else{
-
-            try {
-                const result  = await ATTENDENCE.updateOne({idx:id},{punchOut:true})
-                if(result){
-                    return res.json({
-                        msg:"Punched Out",
-                        success:true
-                    })
-                }
-            } catch (error) {
-                return res.status(501).json({
-                    msg:error.message,
-                    comingFrom:"PunchOut code.",
-                    success:false
-                })
-            }
-
+            console.log("Not working")
+            return res.json({
+                msg: "Punched In Successfully",
+                success: true,
+                data: result
+            });
         }
+
+        // ---------------------------------------------------
+        // CASE 2: TODAY'S PUNCHOUT ALREADY DONE
+        // ---------------------------------------------------
+        if (existing.punchOut === true) {
+            return res.status(501).json({
+                msg: "Already Punched Out Today",
+                success: false
+            });
+        }
+
+        // ---------------------------------------------------
+        // CASE 3: RECORD EXISTS → PUNCH OUT
+        // ---------------------------------------------------
+        const update = await ATTENDENCE.updateOne(
+            { idx: id, date: today },
+            { punchOut: true }
+        );
+
+        if (update.modifiedCount === 1) {
+            return res.json({
+                msg: "Punched Out Successfully",
+                success: true
+            });
+        }
+
+        return res.status(501).json({
+            msg: "Failed to Punch Out",
+            success: false
+        });
 
     } catch (error) {
         return res.status(501).json({
-            msg:error.message,
-            comingFrom:"catch last",
-            success:false
-        })
+            msg: error.message,
+            success: false
+        });
     }
 }
 
