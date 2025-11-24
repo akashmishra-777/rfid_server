@@ -4,12 +4,18 @@ const app = express()
 const attendenceRouter = require("./routes/attendence.js")
 const dbCOnnection = require("./db/db.js")
 const auth  = require("./routes/registration.js")
+const admin = require("./routes/admin.js")
+const cors = require("cors")
 
 app.use(express.json())
+app.use(cors({
+    origin:"*"
+}))
 app.use(express.urlencoded({extended:true}))
 
 app.use("/v1",attendenceRouter)
 app.use("/v2",auth)
+app.use("/v3",admin)
 
 
 app.get("/",(req,res)=>{

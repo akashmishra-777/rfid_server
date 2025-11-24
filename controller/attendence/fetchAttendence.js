@@ -12,9 +12,17 @@ async function fetch_total_attendence(req,res) {
      try {
         const result = await ATTENDENCE.find({idx:req.body.id})
         if(result){
+
+            const finalResult = result.filter((data)=>{
+                if(data.punchIn == true && data.punchOut == true){
+                    return data
+                }
+            })
+
             return res.json({
                 msg:"Record found",
-                data:result,
+                data:finalResult,
+                count:finalResult.length || 0,
                 success:true
             })
         }else{
