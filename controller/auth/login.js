@@ -64,4 +64,4 @@ async function Login(req, res) {
     }
 }
 
-module.exports = Login;
+module.exports = Login
