@@ -11,6 +11,37 @@ async function Registration(req,res) {
         })
     }
 
+    
+    if(!req.body.role){
+        return res.json({
+            success:false,
+            msg:"Role is required."
+        })
+    }
+
+   if(!req.body.id){
+        return res.json({
+            success:false,
+            msg:"Id is not received on the server."
+        })
+    }
+
+
+    if(!req.body.branch && req.body.role == "student"){
+        return res.json({
+            success:false,
+            msg:"Branch is required."
+        })
+    }
+
+
+    if(!req.body.section && req.body.role == "student"){
+        return res.json({
+            success:false,
+            msg:"Section is required."
+        })
+    }
+
     if(!req.body.email){
         return res.json({
             success:false,
@@ -34,28 +65,25 @@ async function Registration(req,res) {
     }
 
 
-    if(!req.body.role){
-        return res.json({
-            success:false,
-            msg:"Role is required."
-        })
-    }
     
     
     
 
-    const {name,phone,email,role,password} = req.body;
+    const {id,name,phone,email,role,password,section,branch} = req.body;
     console.log(role)
    if(role == "student"){
     try {
         const checkUser = await STUDENT_MODAL.findOne({email:email})
         if (!checkUser){
             const result = await STUDENT_MODAL.create({
+                idx:id,
                 name:name,
                 email:email,
                 password:password,
                 role:role,
-                phone:phone
+                phone:phone,
+                section:section,
+                branch,
             })
 
             if(result){
@@ -83,9 +111,13 @@ async function Registration(req,res) {
     }
    }else{
     try {
+        
+
         const checkUser = await TEACHER_MODAL.findOne({email:email})
         if(!checkUser){
             const result = await TEACHER_MODAL.create({
+                idx:req.body.id,
+                department:req.body.department,
                 name,
                 email,
                 password,

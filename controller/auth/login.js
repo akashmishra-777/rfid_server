@@ -3,11 +3,11 @@ const TEACHER = require("../../modals/teachersRegistration.js");
 const bcrypt = require("bcrypt");
 
 async function Login(req, res) {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username) {
+    if (!email) {
         return res.json({
-            msg: "Username not received on the server.",
+            msg: "Email not received on the server.",
             success: false
         });
     }
@@ -21,8 +21,8 @@ async function Login(req, res) {
 
     try {
         // Find user from student or teacher collection
-        const checkFromStudent = await STUDENT.findOne({ email: username });
-        const checkFromTeacher = await TEACHER.findOne({ email: username });
+        const checkFromStudent = await STUDENT.findOne({ email: email });
+        const checkFromTeacher = await TEACHER.findOne({ email: email });
 
         const user = checkFromStudent || checkFromTeacher;
 
@@ -49,6 +49,7 @@ async function Login(req, res) {
             success: true,
             data: {
                 id:user._id,
+                idx:user.idx,
                 name: user.name,
                 role: checkFromTeacher ? "teacher" : "student"
             }

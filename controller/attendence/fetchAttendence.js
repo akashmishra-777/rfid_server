@@ -8,7 +8,6 @@ async function fetch_total_attendence(req,res) {
         })
     }
 
-
      try {
         const result = await ATTENDENCE.find({idx:req.body.id})
         if(result){
