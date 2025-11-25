@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended:true}))
 
 app.use("/v1",attendenceRouter)
 app.use("/v2",auth)
-app.use("/v3",admin)
+app.use("/features",admin)
 
 
 app.get("/",(req,res)=>{
